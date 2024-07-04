@@ -50,7 +50,7 @@ class ProductionCycle:
 
                 if is_match_for_all_conditions:
                     grouped_matched_productions[prod_system_key].append(production)
-                    print(f"Matched Production in {prod_system_key}: {production.get('report')}")
+                    #print(f"Matched Production in {prod_system_key}: {production.get('report')}")
 
         return grouped_matched_productions
 
@@ -85,7 +85,7 @@ class ProductionCycle:
         for cycle_number in range(cycles):
             print(f'\nMilliseconds {(cycle_number + 1) * millisecpercycle} ---------------------------------------')
             matched_productions = self.match_productions(memories, AllProductionSystems)
-            print(f'Matched productions: {matched_productions}')
+            #print(f'Matched productions: {matched_productions}')
             self.execute_actions(memories, matched_productions, AllProductionSystems, DelayResetValues)
             for prod_system_key, prod_system_value in AllProductionSystems.items():
                 print(f'Decrementing delay for {prod_system_key} to {prod_system_value[1]}')
