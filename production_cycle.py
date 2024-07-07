@@ -4,6 +4,7 @@ from utility import Utility
 class ProductionCycle:
     def __init__(self):
         self.pending_actions = []
+        self.delayed_actions = []
 
     def match_productions(self, memories, AllProductionSystems):
         """Finds and groups matched productions."""
@@ -26,23 +27,23 @@ class ProductionCycle:
                     for buffer_key, match_criteria in buffer_conditions.items():
                         if memory_system_key in memories and buffer_key in memories[memory_system_key]:
                             memory_content = memories[memory_system_key][buffer_key]
-                            # print(f"Checking production {production.get('report')} in {prod_system_key}")
-                            # print(f"Memory system: {memory_system_key}, Buffer key: {buffer_key}")
-                            # print(f"Memory content: {memory_content}")
-                            # print(f"Matches: {match_criteria}")
-                            # print(
-                            #     f"Negations: {production['negations'].get(memory_system_key, {}).get(buffer_key, {})}")
+                            print(f"Checking production {production.get('report')} in {prod_system_key}")
+                            print(f"Memory system: {memory_system_key}, Buffer key: {buffer_key}")
+                            print(f"Memory content: {memory_content}")
+                            print(f"Matches: {match_criteria}")
+                            print(
+                                f"Negations: {production['negations'].get(memory_system_key, {}).get(buffer_key, {})}")
 
                             if not Utility.buffer_match_eval(
                                     memory_content,
                                     match_criteria,
                                     production['negations'].get(memory_system_key, {}).get(buffer_key, {})
                             ):
-                                #print(f"Buffer {buffer_key} did not match in memory system {memory_system_key}")
+                                print(f"Buffer {buffer_key} did not match in memory system {memory_system_key}")
                                 is_match_for_all_conditions = False
                                 break
                         else:
-                            #print(f"Buffer key {buffer_key} not found in memory system {memory_system_key}")
+                            print(f"Buffer key {buffer_key} not found in memory system {memory_system_key}")
                             is_match_for_all_conditions = False
                             break
                     if not is_match_for_all_conditions:
@@ -50,7 +51,7 @@ class ProductionCycle:
 
                 if is_match_for_all_conditions:
                     grouped_matched_productions[prod_system_key].append(production)
-                    #print(f"Matched Production in {prod_system_key}: {production.get('report')}")
+                    print(f"Matched Production in {prod_system_key}: {production.get('report')}")
 
         return grouped_matched_productions
 
@@ -68,6 +69,16 @@ class ProductionCycle:
             else:
                 self.pending_actions[i] = (prod_system_key, production, delay - 1)
 
+        for i in range(len(self.delayed_actions) - 1, -1, -1):
+            delayed_action, remaining_cycles = self.delayed_actions[i]
+
+            if remaining_cycles <= 1:
+                delayed_action(memories)
+                print(f'[DELAYED ACTION TAKEN] Execute delayed action.')
+                del self.delayed_actions[i]
+            else:
+                self.delayed_actions[i] = (delayed_action, remaining_cycles - 1)
+
     def filter_and_execute_productions(self, grouped_productions, memories, AllProductionSystems, DelayResetValues):
         for prod_system_key, productions in grouped_productions.items():
             highest_utility_production = Utility.find_max(productions)
@@ -77,6 +88,12 @@ class ProductionCycle:
                 print(f'[ACTION TAKEN] {report_info}')
                 AllProductionSystems[prod_system_key][1] = DelayResetValues[prod_system_key]
 
+                # Schedule delayed action
+                if 'delayed_action' in highest_utility_production and 'delay_cycles' in highest_utility_production:
+                    self.delayed_actions.append(
+                        (highest_utility_production['delayed_action'], highest_utility_production['delay_cycles'])
+                    )
+
     def execute_actions(self, memories, matched_productions, AllProductionSystems, DelayResetValues):
         self.process_pending_actions(memories, AllProductionSystems, DelayResetValues)
         self.filter_and_execute_productions(matched_productions, memories, AllProductionSystems, DelayResetValues)
@@ -85,7 +102,7 @@ class ProductionCycle:
         for cycle_number in range(cycles):
             print(f'\nMilliseconds {(cycle_number + 1) * millisecpercycle} ---------------------------------------')
             matched_productions = self.match_productions(memories, AllProductionSystems)
-            #print(f'Matched productions: {matched_productions}')
+            print(f'Matched productions: {matched_productions}')
             self.execute_actions(memories, matched_productions, AllProductionSystems, DelayResetValues)
             for prod_system_key, prod_system_value in AllProductionSystems.items():
                 print(f'Decrementing delay for {prod_system_key} to {prod_system_value[1]}')
