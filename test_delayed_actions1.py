@@ -82,7 +82,7 @@ MotorProductions.append({
 
 # Production system delays in ticks
 ProductionSystem1_Countdown = 1
-ProductionSystem2_Countdown = 5
+ProductionSystem2_Countdown = 1
 
 # Stores the number of cycles for a production system to fire and reset
 DelayResetValues = {
