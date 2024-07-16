@@ -89,10 +89,10 @@ class ProductionCycle:
         for cycle_number in range(cycles):
             print(f'\nCycle {(cycle_number + 1)}, Time: {(cycle_number + 1) * millisecpercycle} ms')
             matched_productions = self.match_productions(memories, AllProductionSystems)
-            if matched_productions:
-                print(f'Matched productions: {matched_productions}')
-            else:
-                print('No productions matched this cycle.')
+            # if matched_productions:
+            #     print(f'Matched productions: {matched_productions}')
+            # else:
+            #     print('No productions matched this cycle.')
             self.execute_actions(memories, matched_productions, AllProductionSystems, DelayResetValues)
             for prod_system_key, prod_system_value in AllProductionSystems.items():
                 print(f'Remaining delay for {prod_system_key}: {prod_system_value[1]} cycles')
