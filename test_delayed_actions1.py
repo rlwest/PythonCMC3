@@ -39,8 +39,8 @@ def pp2(memories):
     memories['working_memory']['focusbuffer']['state'] = '*'
     print(f"pp2 executed. Updated working_memory: {memories['working_memory']}")
     print('set delayed_pp2 for 4 cycles later ****************************')
-
-    return 4  # Set delay for the delayed action
+    d=4
+    return d  # Set delay for the delayed action
 
 def delayed_pp2(memories):
     memories['emotional_memory']['focusbuffer']['state'] = 'troubled'

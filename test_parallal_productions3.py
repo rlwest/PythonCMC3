@@ -2,7 +2,7 @@ from utility import Utility
 from production_cycle import ProductionCycle
 
 ### works - the first production makes changes the focus so that the next production
-### from the other production system fires
+### from the other production system can fire
 ### by showing that the second producion system never fires on the first cycle
 ### it shows that action for the second system production is not triggered immediatly
 ### by the actions of the first system production in the first cycle
