@@ -1,7 +1,10 @@
 from utility import Utility
 from production_cycle import ProductionCycle
 
-### works - the first productions in both production systems fire off of both memories
+### same as test_parallel_productions1 but does a criss cross
+### this shows that productions can update buffers regardless of
+### what happened before or which buffer they matched on
+### pp2 and mp2 match the same way but change the other buffer
 
 working_memory = {'focusbuffer': {'state': 'a'}}
 environment_memory = {'button1': {'state': '1'}}
@@ -14,7 +17,8 @@ ProceduralProductions = []
 
 def pp1(memories):
     memories['working_memory']['focusbuffer']['state'] = 'b'
-    print(f"pp1 executed. Updated working_memory: {memories['working_memory']}")
+    print(f"[pp1] executed. Updated working_memory: {memories['working_memory']}")
+
 
 ProceduralProductions.append({
     'matches': {'environment_memory': {'button1': {'state': '1'}},'working_memory': {'focusbuffer': {'state': 'a'}}},
@@ -25,9 +29,8 @@ ProceduralProductions.append({
 })
 
 def pp2(memories):
-    memories['working_memory']['focusbuffer']['state'] = '*'
-    print(f"pp2 executed. Updated working_memory: {memories['working_memory']}")
-
+    memories['environment_memory']['button1']['state'] = '*'
+    print(f"[pp2] executed. Updated environment_memory: {memories['environment_memory']}")
 ProceduralProductions.append({
     'matches': {'working_memory': {'focusbuffer': {'state': 'b'}}},
     'negations': {},
@@ -40,7 +43,7 @@ MotorProductions = []
 
 def mp1(memories):
     memories['environment_memory']['button1']['state'] = '2'
-    print(f"mp1 executed. Updated environment_memory: {memories['environment_memory']}")
+    print(f"[mp1] executed. Updated environment_memory: {memories['environment_memory']}")
 
 MotorProductions.append({
     'matches': {'environment_memory': {'button1': {'state': '1'}},'working_memory': {'focusbuffer': {'state': 'a'}}},
@@ -51,8 +54,8 @@ MotorProductions.append({
 })
 
 def mp2(memories):
-    memories['environment_memory']['button1']['state'] = '*'
-    print(f"mp2 executed. Updated environment_memory: {memories['environment_memory']}")
+    memories['working_memory']['focusbuffer']['state'] = '*'
+    print(f"[mp2] executed. Updated working_memory: {memories['working_memory']}")
 
 MotorProductions.append({
     'matches': {'environment_memory': {'button1': {'state': '2'}}},

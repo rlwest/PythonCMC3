@@ -1,8 +1,11 @@
 from utility import Utility
 from production_cycle import ProductionCycle
 
+### parallell production firing
 ### works - procedural productions fire off of working memory and
 ### motor producitons fire off of environment memory
+
+### further testing by varying the production cycles - works
 
 working_memory = {'focusbuffer': {'state': 'a'}}
 environment_memory = {'button1': {'state': '1'}}
@@ -15,7 +18,7 @@ ProceduralProductions = []
 
 def pp1(memories):
     memories['working_memory']['focusbuffer']['state'] = 'b'
-    print(f"pp1 executed. Updated working_memory: {memories['working_memory']}")
+    print(f"[pp1] executed. Updated working_memory: {memories['working_memory']}")
 
 ProceduralProductions.append({
     'matches': {'working_memory': {'focusbuffer': {'state': 'a'}}},
@@ -27,7 +30,7 @@ ProceduralProductions.append({
 
 def pp2(memories):
     memories['working_memory']['focusbuffer']['state'] = '*'
-    print(f"pp2 executed. Updated working_memory: {memories['working_memory']}")
+    print(f"[pp2] executed. Updated working_memory: {memories['working_memory']}")
 
 ProceduralProductions.append({
     'matches': {'working_memory': {'focusbuffer': {'state': 'b'}}},
@@ -41,7 +44,7 @@ MotorProductions = []
 
 def mp1(memories):
     memories['environment_memory']['button1']['state'] = '2'
-    print(f"mp1 executed. Updated environment_memory: {memories['environment_memory']}")
+    print(f"[mp1] executed. Updated environment_memory: {memories['environment_memory']}")
 
 MotorProductions.append({
     'matches': {'environment_memory': {'button1': {'state': '1'}}},
@@ -53,7 +56,7 @@ MotorProductions.append({
 
 def mp2(memories):
     memories['environment_memory']['button1']['state'] = '*'
-    print(f"mp2 executed. Updated environment_memory: {memories['environment_memory']}")
+    print(f"[mp2] executed. Updated environment_memory: {memories['environment_memory']}")
 
 MotorProductions.append({
     'matches': {'environment_memory': {'button1': {'state': '2'}}},
